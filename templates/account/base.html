@@ -1,0 +1,24 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="https://kit.fontawesome.com/cc52db2e78.js" crossorigin="anonymous"></script>
+    <title>{% block title %}{% endblock title %}</title>
+  </head>
+  <body>
+        <div class="container">
+            <main class='mb-5'>
+            {% block content %}
+            
+            {% endblock content %}
+            </main>
+        </div>
+    {% include 'common/footer.html' %}
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+  </body>
+</html>

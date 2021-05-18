@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}{{ image.title }}{% endblock %}
+
+{% block content %}
+  
+  <div class="row">
+    <div class="col-md-6 mt-5">
+        <img src="{{image.image.url}}" alt="" class="img-fluid border">
+    </div>
+    <div class="col-md-6 mt-5">
+      <ul class="list-group list-group-flush" style="font-size: 15px;">
+        <li class="list-group-item"><h2>{{image.title}}</h2></li>
+        <li class="list-group-item">Description: {{image.description|linebreaks}}</li>
+        {% with total_likes=image.users_like.count users_like=image.users_like.all %}
+        <li class="list-group-item">
+          <span class="count">
+            <span class="total">{{ total_likes }}</span>
+            like{{ total_likes|pluralize }}
+          </span>
+        </li>
+        <li class="list-group-item">
+            <a href="#" data-id="{{ image.id }}" data-action="{% if request.user in users_like %}un{% endif %}like" class="like">
+              {% if request.user not in users_like %}
+              <i class="fas fa-thumbs-up"></i>
+              {% else %}
+              <i class="fas fa-thumbs-down" style="color:red"></i>
+              {% endif %}
+            </a>
+        </li>
+        <li class="list-group-item">
+          <div class="d-flex justify-between">
+            {% for user in image.users_like.all %}
+                <img src="{{ user.profile.photo.url }}" class="img-fluid rounded-circle" width="25px"/>
+            {% empty %}
+              Nobody likes this image yet.
+            {% endfor %}
+          </div>
+        </li>
+      {% endwith %}
+      </ul>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block domready %}
+  $('a.like').click(function(e){
+    e.preventDefault();
+    $.post('{% url "images:like" %}',
+      {
+        id: $(this).data('id'),
+        action: $(this).data('action')
+      },
+      function(data){
+        if (data['status'] == 'ok')
+        {
+          var previous_action = $('a.like').data('action');
+
+          // toggle data-action
+          $('a.like').data('action', previous_action == 'like' ? 'unlike' : 'like');
+          // toggle link text
+          $('a.like').html(previous_action == 'like' ? '<i class="fas fa-thumbs-down" style="color:red"></i>' : '<i class="fas fa-thumbs-up"></i>');
+          // update total likes
+          var previous_likes = parseInt($('span.count .total').text());
+          $('span.count .total').text(previous_action == 'like' ? previous_likes + 1 : previous_likes - 1);
+        }
+      }
+    );
+  });
+{% endblock %}

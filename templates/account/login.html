@@ -1,0 +1,56 @@
+{% extends 'account/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Login{% endblock title %}
+
+{% block content %}
+<div class="row no-gutter">
+    <div class="col-md-12">
+        <div class="d-flex align-items-center py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-lg-7 mx-auto">
+                        <form action="." method='post' class='px-4 pt-4 col-lg-8 mx-auto'>
+                            {% csrf_token %}
+                            {% if messages %} {% for message in messages %}
+                            <div class="my-2 alert alert-{{ message.tags }}">{{message}}</div>
+                            {% endfor %} {% endif %}
+                            <h3 class="mb-4">Sign In</h3>
+                                <a class='btn btn-block btn-sm w-100 mb-2' id='facebook' href="{% url 'social:begin' 'facebook' %}" style='font-size:16px'><i class='fab fa-facebook-f' style='font-size:20px'></i>&nbsp;Sign in with Facebook</a>
+                                <a class='btn btn-block btn-sm w-100 mb-2' id='twitter' href="{% url 'social:begin' 'twitter' %}" style='font-size:16px'><i class='fab fa-twitter' style='font-size:20px'></i>&nbsp;Sign in with Twitter</a>
+                                <a class='btn btn-block btn-sm w-100' id='google' href="{% url 'social:begin' 'google-oauth2' %}" style='font-size:16px'><i class='fab fa-google' style='font-size:20px'></i>&nbsp;Sign in with Google</a>
+                                <p class="my-4" id="or">OR</p>
+                                {{form|crispy}}
+                            <div class="d-grid gap-2">
+                                <input type="hidden" name="next" value="{{next}}">
+                                <button type="submit" class='btn btn-info btn-block w-100 py-2 mb-4 mt-4' value="Log-in">
+                                    Sign In
+                                </button>
+                            </div>
+                            <p class="text-center pb-3">
+                                <a href="{% url 'account:register' %}">Register for an account?</a>
+                                <br>
+                                <a href="{% url 'password_reset' %}">Forgot password?</a>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+
+                        <div class="row mb-3">
+                                <div class="col">
+                                    <a class='btn btn-info' href="{% url 'social:begin' 'facebook' %}"><i class='fab fa-facebook' style='font-size:24px'></i></a>
+                                </div>
+                                <div class="col">
+                                    <a class='btn btn-info' href="{% url 'social:begin' 'twitter' %}"><i class='fab fa-twitter' style='font-size:24px'></i></a>
+                                </div>
+                                <div class="col">
+
+                                </div>
+                        </div>
+

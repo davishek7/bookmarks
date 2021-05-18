@@ -1,0 +1,16 @@
+<!-- Sidebar-->
+<div class="bg-light border-right" id="sidebar-wrapper">
+  <div class="sidebar-heading">
+  {% if request.user.is_authenticated %}
+    <i class="fas fa-user-circle"></i>&nbsp;Welcome, {{request.user}}
+  {% endif %}
+  </div>
+  <div class="list-group">
+    <a class="list-group-item list-group-item-action bg-light {% if nbar == 'dashboard' %}active text-dark{% endif %}" href="{% url 'images:index' %}"><i class="fas fa-tachometer-alt"></i>&nbsp;Dashboard</a>
+    <a class="list-group-item list-group-item-action bg-light {% if nbar == 'images' %}active text-dark{% endif %}" href="{% url 'images:list' %}"><i class="fas fa-images"></i>&nbsp;Images</a>
+    <a class="list-group-item list-group-item-action bg-light {% if nbar == 'people' %}active text-dark{% endif %}" href="{% url 'account:user_list'%}"><i class="fas fa-users"></i>&nbsp;Peoples</a>
+    <a class="list-group-item list-group-item-action bg-light {% if nbar == 'profile' %}active text-dark{% endif %}" href="{% url 'account:update_user' %}"><i class='fas fa-address-card'></i>&nbsp;Profile</a>
+    <a class="list-group-item list-group-item-action bg-light {% if 'password_change' in request.get_full_path %}active text-dark{% endif%}" href="{% url 'password_change' %}"><i class='fas fa-key'></i>&nbsp;Change Password</a>
+    <a class="list-group-item list-group-item-action bg-light" href="{% url 'account:logout' %}"><i class="fas fa-sign-out-alt"></i>&nbsp;Logout</a>
+  </div>
+</div>
