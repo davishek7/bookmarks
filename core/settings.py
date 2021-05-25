@@ -6,12 +6,12 @@ from django.urls import reverse_lazy
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-89&)uhj)n*q!6e*(zh=$63lx(q-ju0@zvy4cvxsgp&((-72_&('
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 DEBUG = True
 
 ALLOWED_HOSTS = ['mysite.com', '127.0.0.1',
-                 'localhost', 'e5772d201b1c.ngrok.io']
+                 'localhost', 'avisheksocials.herokuapp.com']
 
 
 INSTALLED_APPS = [
@@ -26,13 +26,17 @@ INSTALLED_APPS = [
     'crispy_forms',
     'social_django',
     'sorl.thumbnail',
+    'hitcount',
+    'django_social_share',
 
     'images.apps.ImagesConfig',
     'account.apps.AccountConfig',
+    'actions.apps.ActionsConfig',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -100,7 +104,7 @@ MEDIA_URL = '/bookmarks_media/'
 
 MEDIA_ROOT = BASE_DIR / 'bookmarks_media'
 
-# DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
@@ -139,16 +143,16 @@ ABSOLUTE_URL_OVERRIDES = {
 
 # Social Auth Keys
 
-SOCIAL_AUTH_FACEBOOK_KEY = '210399953942739'  # Facebook App ID
-SOCIAL_AUTH_FACEBOOK_SECRET = '73babf632819f93362587cea1a2e3c9f'  # Facebook App Secret
+SOCIAL_AUTH_FACEBOOK_KEY = os.environ.get('SOCIAL_AUTH_FACEBOOK_KEY')  # Facebook App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = os.environ.get('SOCIAL_AUTH_FACEBOOK_SECRET')  # Facebook App Secret
 
-SOCIAL_AUTH_TWITTER_KEY = 'aNxTO3vmJ0MQYFLGrRhhbQkCT'  # Twitter Consumer Key
+SOCIAL_AUTH_TWITTER_KEY = os.environ.get('SOCIAL_AUTH_TWITTER_KEY')  # Twitter Consumer Key
 # Twitter API Secret
-SOCIAL_AUTH_TWITTER_SECRET = 'HBVFkH6fEyQD788iiz8AVgmkTVbKhNH0BdAP9L6GBGKrzaLbMh'
+SOCIAL_AUTH_TWITTER_SECRET = os.environ.get('SOCIAL_AUTH_TWITTER_SECRET')
 
 # Google Consumer Key
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '550198032986-r2t2qtb06n264bs22efc1pdchutg0fmd.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'GHHL04u7ysjnHZXvZrMFMP5U'  # Google Consumer Secret
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')  # Google Consumer Secret
 
 
 SOCIAL_AUTH_PIPELINE = (
@@ -195,4 +199,14 @@ SOCIAL_AUTH_PIPELINE = (
     # Update the user record with any changed info from the auth service.
     'social_core.pipeline.user.user_details',
 )
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('CLOUD_NAME'),
+    'API_KEY': os.environ.get('API_KEY'),
+    'API_SECRET': os.environ.get('API_SECRET')
+}
+
+
+if os.getcwd() == '/app':
+    DEBUG = False
 

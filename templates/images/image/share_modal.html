@@ -1,0 +1,23 @@
+<!-- Modal -->
+{% load social_share %}
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Share '{{image.title}}' !</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group list-group-horizontal justify-content-center">
+            <li class="list-group-item">{% post_to_twitter "Image: {{image.title}}. Check it out!" object_or_url '<i class="fab fa-twitter-square text-teal" style="font-size:24px"></i>' %}</li>
+            <li class="list-group-item">{% post_to_reddit "Image: {{image.title}}" object_or_url '<i class="fab fa-reddit-square" style="font-size:24px;color:red"></i>' %}</li>
+            <li class="list-group-item">{% post_to_whatsapp object_or_url '<i class="fab fa-whatsapp-square text-success" style="font-size:24px;"></i>' %}</li>
+            <li class="list-group-item">{% post_to_facebook object_or_url '<i class="fab fa-facebook-square" style="font-size:24px;color:blue"></i>' %}</li>
+            <li class="list-group-item">{% send_email image.title "Image: {{image.title}}. Check it out!" object_or_url '<i class="fas fa-envelope-square text-warning" style="font-size:24px"></i>' %}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

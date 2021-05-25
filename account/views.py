@@ -1,7 +1,5 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect,get_object_or_404
-# from django.urls import reverse_lazy
-# from django.contrib.auth import login
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import CreateUserForm, ProfileUpdateForm, UserUpdateForm
@@ -9,6 +7,7 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.models import User
 from common.decorators import ajax_required
 from .models import Contact
+from actions.utils import create_action
 
 
 def register_user(request):
@@ -78,7 +77,7 @@ def user_follow(request):
             if action == 'follow':
                 Contact.objects.get_or_create(user_from=request.user,
                                               user_to=user)
-                # create_action(request.user, 'is following', user)
+                create_action(request.user, 'is following', user)
             else:
                 Contact.objects.filter(user_from=request.user,
                                        user_to=user).delete()

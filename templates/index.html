@@ -3,16 +3,23 @@
 {% block title %}Dashboard{% endblock title %}
 
 {% block content %}
-
-{% with total_images_created=request.user.images_created.count %}
-<p>Welcome to your dashboard. You have bookmarked {{ total_images_created }} image{{ total_images_created|pluralize }}.</p>
-{% endwith %}
-<p>Drag the following button to your bookmarks toolbar to bookmark images
-from other websites → <a href="javascript:{% include "images/bookmarklet_launcher.js" %}" 
-class="btn btn-danger"><i class="far fa-bookmark">&nbsp;Bookmark It!</i></a><p>
-
-<hr/>
-
-<h1>Your Feed</h1>
+<div class="row">
+  <div class="col">
+    {% with total_images_created=request.user.images_created.count %}
+    <p>Welcome to your dashboard. You have bookmarked {{ total_images_created }} image{{ total_images_created|pluralize }}.</p>
+    {% endwith %}
+    <p>Drag the following button to your bookmarks toolbar to bookmark images
+    from other websites → <a href="javascript:{% include "images/bookmarklet_launcher.js" %}" 
+    class="btn btn-danger"><i class="far fa-bookmark">&nbsp;Bookmark It!</i></a><p>
+  </div>
+  <div class="col">
+    <h3>Your Feed</h3>
+    <div class="container-fluid">
+      {% for action in actions %}
+      {% include "actions/action/detail.html" %}
+    {% endfor %}
+    </div>
+  </div>
+</div>
 
 {% endblock content %}

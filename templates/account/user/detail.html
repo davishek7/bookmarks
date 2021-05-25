@@ -1,31 +1,67 @@
 {% extends "base.html" %}
-{% load thumbnail %}
 
-{% block title %}{{ user.get_full_name }}{% endblock %}
+{% block title %}{{ user.username }}'s Profile {% endblock %}
 
 {% block content %}
-  <h1>{{ user.get_full_name }}</h1>
-  <div class="profile-info">
-    {% thumbnail user.profile.photo "180x180" crop="100%" as im %}
-      <img src="{{ im.url }}" class="user-detail">
-    {% endthumbnail %}
+
+{% if request.user.username in request.get_full_path %}
+<script>
+  window.location.href="{% url 'account:update_user' %}";
+</script>
+
+{% endif%}
+
+<div class="row no-gutter">
+  <div class="col-md-12">
+      <div class="d-flex align-items-center py-3">
+          <div class="container">
+              <div class="row">
+                  <div class="col-12 col-lg-7 mx-auto">
+                      <div class="card card-body my-4 px-4 pt-4 col-lg-8 mx-auto shadow-lg">
+                          <div class="clearfix">
+                              <h3 class="float-left">Profile</h3>
+                              <a href="#" data-id="{{ user.id }}" data-action="{% if request.user in user.followers.all %}un{% endif %}follow" class="follow float-right btn btn-sm btn-outline-primary">
+                                {% if request.user not in user.followers.all %}
+                                  Follow
+                                {% else %}
+                                  Following
+                                {% endif %}
+                              </a>
+                          </div>
+                          <hr>
+                          <img class="profile-pic p-3" src="{{user.profile.photo.url}}" width="100%">
+                          <div class="text-center">
+                              <h4>{{user.get_full_name}}</h4>
+                              <span class="text-muted">@{{user.username}}</span>
+                          </div>
+                          <h6 class="d-flex justify-content-around mt-3">
+                              <p><i class='fas fa-users'></i>
+                                <span class="count">
+                                  <span class="total">{{ user.followers.count }}</span>
+                                  Follower{{ user.followers.count|pluralize }}
+                                </span>
+                              </p>
+                              <p><i class="fas fa-user-friends"></i>&nbsp;{{user.following.count}}&nbsp;Following</p>
+                          </h6>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
   </div>
-  {% with total_followers=user.followers.count %}
-    <span class="count">
-      <span class="total">{{ total_followers }}</span>
-      follower{{ total_followers|pluralize }}
-    </span>
-    <a href="#" data-id="{{ user.id }}" data-action="{% if request.user in user.followers.all %}un{% endif %}follow">
-      {% if request.user not in user.followers.all %}
-        <i class="fas fa-user-plus"></i>
-      {% else %}
-        <i class="fas fa-user-minus" style="color:red"></i>
-      {% endif %}
-    </a>
-    <div id="image-list" class="image-container">
-      {% include "images/image/list_ajax.html" with images=user.images_created.all %}
-    </div>
-  {% endwith %}
+</div>
+
+{% with total_images=user.images_created.all %}
+{% if total_images.count > 0 %}
+<h3 class="text-center my-4">Bookmarked Images</h3>
+<div class="row">
+  {% include "images/image/list_ajax.html" with images=total_images %}
+</div>
+{% else %}
+<h3 class="text-center my-4">No bookmark found!</h3>
+{% endif %}
+{% endwith %}
+
 {% endblock %}
 
 {% block domready %}
@@ -44,9 +80,8 @@
           $('a.follow').data('action',
             previous_action == 'follow' ? 'unfollow' : 'follow');
           // toggle link text
-          {% comment %} $('a.follow').text(
-            previous_action == 'follow' ? 'Unfollow' : 'Follow'); {% endcomment %}
-          $('a.follow').html(previous_action == 'follow' ? '<i class="fas fa-user-minus" style="color:red"></i>' : '<i class="fas fa-user-plus"></i>')
+          $('a.follow').text(
+            previous_action == 'follow' ? 'Following' : 'Follow');
           // update total followers
           var previous_followers = parseInt(
             $('span.count .total').text());

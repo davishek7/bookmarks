@@ -15,6 +15,9 @@ django-crispy-forms = "*"
 social-auth-app-django = "*"
 coverage = "*"
 sorl-thumbnail = "*"
+django-hitcount = "*"
+django-social-share = "*"
+psycopg2 = "*"
 
 [dev-packages]
 

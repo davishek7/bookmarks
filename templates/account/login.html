@@ -10,7 +10,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12 col-lg-7 mx-auto">
-                        <form action="." method='post' class='px-4 pt-4 col-lg-8 mx-auto'>
+                        <form action="." method='post' class='px-4 pt-4 col-lg-8 mx-auto shadow-lg'>
                             {% csrf_token %}
                             {% if messages %} {% for message in messages %}
                             <div class="my-2 alert alert-{{ message.tags }}">{{message}}</div>
@@ -40,17 +40,4 @@
     </div>
 </div>
 {% endblock content %}
-
-
-                        <div class="row mb-3">
-                                <div class="col">
-                                    <a class='btn btn-info' href="{% url 'social:begin' 'facebook' %}"><i class='fab fa-facebook' style='font-size:24px'></i></a>
-                                </div>
-                                <div class="col">
-                                    <a class='btn btn-info' href="{% url 'social:begin' 'twitter' %}"><i class='fab fa-twitter' style='font-size:24px'></i></a>
-                                </div>
-                                <div class="col">
-
-                                </div>
-                        </div>
 

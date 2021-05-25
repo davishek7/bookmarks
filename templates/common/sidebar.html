@@ -13,4 +13,5 @@
     <a class="list-group-item list-group-item-action bg-light {% if 'password_change' in request.get_full_path %}active text-dark{% endif%}" href="{% url 'password_change' %}"><i class='fas fa-key'></i>&nbsp;Change Password</a>
     <a class="list-group-item list-group-item-action bg-light" href="{% url 'account:logout' %}"><i class="fas fa-sign-out-alt"></i>&nbsp;Logout</a>
   </div>
+  {% include 'common/footer.html' %}
 </div>

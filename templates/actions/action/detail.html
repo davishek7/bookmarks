@@ -1,0 +1,52 @@
+{% load thumbnail %}
+
+{% with user=action.user profile=action.user.profile %}
+
+<div class="d-flex justify-content alert alert-secondary">
+
+  <div class="float-left p-2">
+    {% if profile.photo %}
+      {% thumbnail user.profile.photo "80x80" crop="100%" as im %}
+        <a href="{{ user.get_absolute_url }}">
+          <img src="{{ im.url }}" alt="{{ user.get_full_name }}" class="rounded">
+        </a>
+      {% endthumbnail %}
+    {% endif %}
+
+    {% if action.target %}
+      {% with target=action.target %}
+        {% if target.image %}
+          {% thumbnail target.image "80x80" crop="100%" as im %}
+            <a href="{{ target.get_absolute_url }}">
+              <img src="{{ im.url }}" class="rounded">
+            </a>
+          {% endthumbnail %}
+          {% else %}
+          {% thumbnail target.profile.photo "80x80" crop="100%" as im %}
+            <a href="{{ target.get_absolute_url }}">
+              <img src="{{ im.url }}" class="rounded">
+            </a>
+          {% endthumbnail %}
+        {% endif %}
+      {% endwith %}
+    {% endif %}
+  </div>
+
+  <div class="float-right mt-2">
+    <p>
+      <a href="{{ user.get_absolute_url }}">
+        {{ user.username }}
+      </a>
+      {{ action.verb }}
+      {% if action.target %}
+        {% with target=action.target %}
+          <a href="{{ target.get_absolute_url }}">{{ target }}</a>
+        {% endwith %}
+      {% endif %}
+      <br>
+      <span class="small text-muted">{{ action.created|timesince }} ago</span>
+    </p>
+  </div>
+</div>
+
+{% endwith %}

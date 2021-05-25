@@ -1,45 +1,85 @@
 {% extends "base.html" %}
+{% load hitcount_tags %}
+{% load humanize %}
+{% load thumbnail %}
 
 {% block title %}{{ image.title }}{% endblock %}
 
 {% block content %}
-  
-  <div class="row">
-    <div class="col-md-6 mt-5">
-        <img src="{{image.image.url}}" alt="" class="img-fluid border">
-    </div>
-    <div class="col-md-6 mt-5">
-      <ul class="list-group list-group-flush" style="font-size: 15px;">
-        <li class="list-group-item"><h2>{{image.title}}</h2></li>
-        <li class="list-group-item">Description: {{image.description|linebreaks}}</li>
-        {% with total_likes=image.users_like.count users_like=image.users_like.all %}
-        <li class="list-group-item">
-          <span class="count">
-            <span class="total">{{ total_likes }}</span>
-            like{{ total_likes|pluralize }}
-          </span>
-        </li>
-        <li class="list-group-item">
-            <a href="#" data-id="{{ image.id }}" data-action="{% if request.user in users_like %}un{% endif %}like" class="like">
-              {% if request.user not in users_like %}
-              <i class="fas fa-thumbs-up"></i>
-              {% else %}
-              <i class="fas fa-thumbs-down" style="color:red"></i>
-              {% endif %}
-            </a>
-        </li>
-        <li class="list-group-item">
-          <div class="d-flex justify-between">
-            {% for user in image.users_like.all %}
-                <img src="{{ user.profile.photo.url }}" class="img-fluid rounded-circle" width="25px"/>
-            {% empty %}
-              Nobody likes this image yet.
-            {% endfor %}
+<div class="row no-gutter">
+  <div class="col-md-12">
+      <div class="d-flex align-items-center py-3">
+          <div class="container">
+              <div class="row">
+                  <div class="col-12 col-lg-12 mx-auto">
+                    <div class="card mb-3 shadow-lg rounded">
+                      <div class="row no-gutters">
+                        <div class="col">
+                          <figure class="figure">
+                            <img src="{{image.image.url}}" alt="..." class="figure-img img-thumbnail rounded">
+                            <figcaption class="figure-caption text-right"><i class='far fa-calendar'></i>&nbsp;{{image.created}}</figcaption>
+                          </figure>
+                          <div class="d-flex justify-content-around">
+                            <p style='font-size:18px;'>
+                              <a href="#" data-id="{{ image.id }}" data-action="{% if request.user in image.users_like.all %}un{% endif %}like" class="like" onclick="myToasts()">
+                                {% if request.user not in image.users_like.all %}
+                                <i class="fas fa-thumbs-up text-dark"></i>
+                                {% else %}
+                                <i class="fas fa-thumbs-up text-primary"></i>
+                                {% endif %}
+                              </a>
+                              <span class="like-count align-items-right">
+                                <span class="total">{{ image.users_like.count }}</span>
+                              </span>
+                            </p>
+                            <p style='font-size:18px;'><i class='fas fa-eye'></i>&nbsp;{% get_hit_count for image as views %}{{views}}</p>
+                            <i class="fas fa-share-alt text-primary" type="button" data-toggle="modal" data-target="#staticBackdrop" title='Share' style="font-size:18px"></i>
+                          </div>
+                        </div>
+                        <div class="col">
+                            <div class="card-body">
+                              <h1 class="card-title mb-3">{{image.title}}</h1>
+                              <p class="card-subtitle text-muted mt-3">{{image.description}}</p>
+                              <div class="d-flex bd-highlight mt-5">
+                                <div class="p-2 bd-highlight">
+                                  <img src="{{image.user.profile.photo.url}}" class="profile-pic" width="25px">
+                                </div>
+                                <div class="p-2 bd-highlight">
+                                  <a href="{{image.user.get_absolute_url}}">
+                                    <span class='user'>{{image.user.username}}</span>
+                                  </a>
+                                  <br>
+                                  <span class="follower-count">
+                                    <span class="total">{{ user.followers.count }}</span>
+                                    Follower{{ user.followers.count|pluralize }}
+                                  </span>
+                                </div>
+                                <div class="ml-auto p-2 bd-highlight">
+                                  {% if request.user == image.user %}
+                                  <a href="{{image.user.get_absolute_url}}" class="btn btn-sm btn-outline-primary">Profile</a>
+                                {% else %}
+                                  <a href="#" data-id="{{ user.id }}" data-action="{% if request.user in user.followers.all %}un{% endif %}follow" class="follow btn btn-sm btn-outline-primary">
+                                    {% if request.user not in user.followers.all %}
+                                      Follow
+                                    {% else %}
+                                      Following
+                                    {% endif %}
+                                  </a>
+                                {% endif %}
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="snackbar">
+
+              </div>
+              {% include 'images/image/share_modal.html' %}
           </div>
-        </li>
-      {% endwith %}
-      </ul>
-    </div>
+      </div>
   </div>
 
 {% endblock %}
@@ -60,10 +100,37 @@
           // toggle data-action
           $('a.like').data('action', previous_action == 'like' ? 'unlike' : 'like');
           // toggle link text
-          $('a.like').html(previous_action == 'like' ? '<i class="fas fa-thumbs-down" style="color:red"></i>' : '<i class="fas fa-thumbs-up"></i>');
+          $('a.like').html(previous_action == 'like' ? '<i class="fas fa-thumbs-up text-primary"></i>' : '<i class="fas fa-thumbs-up text-dark"></i>');
           // update total likes
-          var previous_likes = parseInt($('span.count .total').text());
-          $('span.count .total').text(previous_action == 'like' ? previous_likes + 1 : previous_likes - 1);
+          var previous_likes = parseInt($('span.like-count .total').text());
+          $('span.like-count .total').text(previous_action == 'like' ? previous_likes + 1 : previous_likes - 1);
+          $('#snackbar').text(previous_action == 'like' ? 'You have liked the picture!' : 'You have unliked the picture!')
+        }
+      }
+    );
+  });
+
+  $('a.follow').click(function(e){
+    e.preventDefault();
+    $.post('{% url "account:user_follow" %}',
+      {
+        id: $(this).data('id'),
+        action: $(this).data('action')
+      },
+      function(data){
+        if (data['status'] == 'ok') {
+          var previous_action = $('a.follow').data('action');
+
+          // toggle data-action
+          $('a.follow').data('action',
+            previous_action == 'follow' ? 'unfollow' : 'follow');
+          // toggle link text
+          $('a.follow').text(
+            previous_action == 'follow' ? 'Following' : 'Follow');
+          // update total followers
+          var previous_followers = parseInt(
+            $('span.follower-count .total').text());
+          $('span.follower-count .total').text(previous_action == 'follow' ? previous_followers + 1 : previous_followers - 1);
         }
       }
     );

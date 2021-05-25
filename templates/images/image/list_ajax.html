@@ -1,16 +1,29 @@
-{% load humanize %}
+{% load hitcount_tags %}
 {% for image in images %}
 <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-    <div class="card bg-light shadow-sm mb-4 rounded border-info">
+    <div class="card bg-light shadow-lg mb-4 rounded border-info">
         <a href="{{image.get_absolute_url}}">
-            <img src="{{image.image.url}}" class="card-img-top" alt={{image.title}}>
+            <img src="{{image.image.url}}" class="img-list" alt={{image.title}}>
         </a>
         <div class="card-body">
             <a href="{{image.get_absolute_url}}" class="text-decoration-none text-dark">
-                <h5 class="card-title">{{image.title}}</h5>
+                <h5 class="card-title mb-4">{{image.title}}</h5>
             </a>
-            <p class="card-text float-right"><i class='far fa-clock'></i>&nbsp;{{image.created|naturaltime}}</p>
-            <p><i class='fas fa-thumbs-up'></i>&nbsp;{{image.users_like.count}}</p>
+            <div class="d-flex justify-content-between">
+                <p class="card-text"><i class='fas fa-user-alt'></i>&nbsp;
+                    <a
+                        {% if image.user == request.user %}
+                        href="{% url 'account:update_user' %}"
+                        {% else %} 
+                        href="{{image.user.get_absolute_url}}"
+                        {% endif %}
+                        class="text-decoration-none"
+                        >{{image.user.username}}
+                    </a>
+                </p>
+                <p><i class='fas fa-eye'></i>&nbsp;{% get_hit_count for image as views %}{{views}}</p>
+                <p><i class='fas fa-thumbs-up text-primary'></i>&nbsp;{{image.users_like.count}}</p>
+            </div>
         </div>
     </div>
 </div>

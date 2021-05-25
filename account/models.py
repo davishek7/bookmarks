@@ -13,7 +13,7 @@ class Profile(models.Model):
 
     date_of_birth=models.DateField(blank = True, null = True)
 
-    photo = models.ImageField(upload_to=user_directory_path, blank=True)
+    photo = models.ImageField(upload_to=user_directory_path,default='profile_pic.png', blank=True)
 
 
     def __str__(self):
