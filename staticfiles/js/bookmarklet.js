@@ -1,7 +1,7 @@
 (function () {
   alert('bookmarklet loaded!')
-  var site_url = 'https://avisheksocials.herokuapp.com';
-  var static_url = site_url + "/static/";
+  var site_url = 'https://avisheksocials.herokuapp.com/';
+  var static_url = site_url + 'static/';
   var min_width = 100;
   var min_height = 100;
 
@@ -50,7 +50,7 @@
       // open new window to submit the image
       window.open(
         site_url +
-          "/images/create/?url=" +
+          "images/create/?url=" +
           encodeURIComponent(selected_image) +
           "&title=" +
           encodeURIComponent(jQuery("title").text()),
