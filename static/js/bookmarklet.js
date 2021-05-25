@@ -1,7 +1,7 @@
 (function () {
   alert('bookmarklet loaded!')
-  var site_url = "https://avisheksocials.herokuapp.com";
-  var static_url = site_url + "/static/";
+  var site_url = 'https://avisheksocials.herokuapp.com/';
+  var static_url = site_url + 'static/';
   var min_width = 100;
   var min_height = 100;
 
