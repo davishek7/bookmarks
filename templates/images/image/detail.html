@@ -58,8 +58,10 @@
                                   {% if request.user == image.user %}
                                   <a href="{{image.user.get_absolute_url}}" class="btn btn-sm btn-outline-primary">Profile</a>
                                 {% else %}
-                                  <a href="#" data-id="{{ user.id }}" data-action="{% if request.user in user.followers.all %}un{% endif %}follow" class="follow btn btn-sm btn-outline-primary">
-                                    {% if request.user not in user.followers.all %}
+                                  <a href="#" data-id="{{ image.user.id }}" 
+                                  data-action="{% if request.user in image.user.followers.all %}un{% endif %}follow" 
+                                  class="follow btn btn-sm btn-outline-primary">
+                                    {% if request.user not in image.user.followers.all %}
                                       Follow
                                     {% else %}
                                       Following
