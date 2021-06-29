@@ -104,7 +104,7 @@ MEDIA_URL = '/bookmarks_media/'
 
 MEDIA_ROOT = BASE_DIR / 'bookmarks_media'
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+#DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
