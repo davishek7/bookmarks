@@ -4,7 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "*"
 dj-database-url = "*"
 gunicorn = "*"
 whitenoise = "*"
@@ -17,7 +16,8 @@ coverage = "*"
 sorl-thumbnail = "*"
 django-hitcount = "*"
 django-social-share = "*"
-psycopg2 = "*"
+psycopg2-binary = "*"
+django = "==3.2"
 
 [dev-packages]
 
